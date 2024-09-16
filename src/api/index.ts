@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IMessage } from "../types";
 import { MessageFactory } from "../utils/MessageFactory";
 
@@ -6,12 +6,18 @@ const createWSConnection = () => {
     return new WebSocket(import.meta.env.VITE_WS_URL);
 }
 
+const messageFactoryRefered = ()=>{
+    const messageFactory = useRef(new MessageFactory())
+
+    return messageFactory.current
+}
+
 export const useWebSocket = () => {
     const [ws, setWs] = useState(createWSConnection());
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [loading, setLoading] = useState(true)
     
-    const messageFactory = new MessageFactory()
+    const messageFactory = messageFactoryRefered()
     
     ws.onopen = () => {
         setLoading(false);
@@ -22,8 +28,8 @@ export const useWebSocket = () => {
         setWs(createWSConnection())
     }
 
-    ws.onmessage = (event) => {
-        const newMessage = messageFactory.parse(event.data);
+    ws.onmessage = async (event) => {
+        const newMessage = await messageFactory.parse(event.data);
         setMessages((prev) => ([...prev, newMessage]))
     }
 
@@ -32,5 +38,5 @@ export const useWebSocket = () => {
         ws.send(message)
     }
 
-    return { messages, sendMessage, loading }
+    return { messages, sendMessage, loading, clientId: messageFactory.getClientId() }
 }

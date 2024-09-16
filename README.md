@@ -7,7 +7,7 @@ You need create simple ws server
 npm install ws
 ```
 
-//copy this code and paste to index.js
+Copy this code and paste to index.js
 ```const WebSocketServer = require('ws').Server;
 
 var clients = new Set();
@@ -29,9 +29,13 @@ node index.js
 ### Installing
 1. Copy this repository
 2. install packages
-```npm install```
+```
+npm install
+```
 3. run client in dev mode
-```npm run dev```
+```
+npm run dev
+```
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

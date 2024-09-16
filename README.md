@@ -1,3 +1,37 @@
+# How to run?
+
+## Server
+You need create simple ws server
+### Installing
+```
+npm install ws
+```
+
+//copy this code and paste to index.js
+```const WebSocketServer = require('ws').Server;
+
+var clients = new Set();
+var socket = new WebSocketServer({ port: 8080 });
+socket.on('connection', function connection(ws) {    
+    clients.add(ws);
+    ws.on('message', async function incoming(message) {
+    clients.forEach(function(client) {
+            client.send(message);
+        });
+      });
+});
+```
+### Running server
+```
+node index.js
+```
+## Client 
+### Installing
+1. Copy this repository
+2. install packages
+```npm install```
+3. run client in dev mode
+```npm run dev```
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

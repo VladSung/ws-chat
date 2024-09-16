@@ -1,27 +1,27 @@
 import { IMessage } from "../types";
 
 export class MessageFactory {
-    clientId: string;
+    private _clientId: string;
     messagesCount: number = 0;
 
     constructor(){
-        this.clientId = 'id'+ new Date().getDate()+Math.floor(Math.random()*100)
+        this._clientId = 'id'+ Math.floor(Math.random()*360) + new Date().getDate()
     }
 
     getClientId(){
-        return this.clientId;
+        return this._clientId;
     }
 
     create(text:string){
         return JSON.stringify({
-            clientId: this.clientId,
+            clientId: this._clientId,
             text,
-            timestamp: new Date().toString(),
-            id: this.clientId + ++this.messagesCount
+            timestamp: new Date().toISOString(),
+            id: this._clientId + ++this.messagesCount
         })
     }
 
-    parse(message:string){
-        return JSON.parse(message) as IMessage
+    async parse(message:Blob){
+        return JSON.parse(await message.text()) as IMessage
     }
 }
